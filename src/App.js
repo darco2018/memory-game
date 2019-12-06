@@ -1,75 +1,93 @@
 import React from 'react';
 import BoxesList from './components/BoxesList';
 import './App.css';
-import { status } from './components/Box';
+import Navbar from './components/Navbar'
+//import { status } from './components/Box';
 
 //const NO_OF_COLORS = 8;
+
+export const status = {
+  FACE_UP: 0,
+  FACE_DOWN: 1,
+  MATCHING: 2
+};
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
+    let boxes = [
+      { id: 0, boxState: status.FACE_DOWN, color: 'blue' },
+      { id: 1, boxState: status.FACE_DOWN, color: 'aqua' },
+      { id: 2, boxState: status.FACE_DOWN, color: 'yellow' },
+      { id: 3, boxState: status.FACE_DOWN, color: 'pink' },
+      { id: 4, boxState: status.FACE_DOWN, color: 'purple' },
+      { id: 5, boxState: status.FACE_DOWN, color: 'red' },
+      { id: 6, boxState: status.FACE_DOWN, color: 'brown' },
+      { id: 7, boxState: status.FACE_DOWN, color: 'coral' },
+      { id: 8, boxState: status.FACE_DOWN, color: 'yellow' },
+      { id: 9, boxState: status.FACE_DOWN, color: 'blue' },
+      { id: 10, boxState: status.FACE_DOWN, color: 'pink' },
+      { id: 11, boxState: status.FACE_DOWN, color: 'aqua' },
+      { id: 12, boxState: status.FACE_DOWN, color: 'purple' },
+      { id: 13, boxState: status.FACE_DOWN, color: 'brown' },
+      { id: 14, boxState: status.FACE_DOWN, color: 'coral' },
+      { id: 15, boxState: status.FACE_DOWN, color: 'red' }
+    ]
+
+    boxes = this.shuffleBoxes(boxes);
+
     this.state = {
-      boxes: this.props.boxes,
-      guessedPairs: 0,
+      boxes,
       previousId: -1
     };
   }
 
   handleClick = id => {
-    const currentCopy = { ...this.state.boxes[id] };
-    const previousCopy =
+    const currentBoxCopy = { ...this.state.boxes[id] };
+    const previousBoxCopy =
       this.state.previousId === -1
-        ? { id: -1, boxState: status.FACE_DOWN, color: '' } // dummy
+        ? { id: -1, boxState: status.FACE_DOWN, color: '' } // set dummy box on first click
         : { ...this.state.boxes[this.state.previousId] };
-    let newPreviousID = null;
-    let isMatch = false;
 
-    if (previousCopy.color === currentCopy.color) {
-      previousCopy.boxState = status.MATCHING;
-      currentCopy.boxState = status.MATCHING;
+    let newPreviousID = null;
+    if (previousBoxCopy.color === currentBoxCopy.color) {
+      previousBoxCopy.boxState = status.MATCHING;
+      currentBoxCopy.boxState = status.MATCHING;
       newPreviousID = -1;
-      isMatch = true;
     } else {
-      previousCopy.boxState = status.FACE_DOWN;
-      currentCopy.boxState = status.FACE_UP;
+      previousBoxCopy.boxState = status.FACE_DOWN;
+      currentBoxCopy.boxState = status.FACE_UP;
       newPreviousID = id;
     }
 
-    let newBoxes = [...this.state.boxes];
-    newBoxes[this.state.previousId] = previousCopy;
-    newBoxes[id] = currentCopy;
+    let boxesCopy = [...this.state.boxes];
+    boxesCopy[this.state.previousId] = previousBoxCopy;
+    boxesCopy[id] = currentBoxCopy;
 
     this.setState((prevState, props) => {
       return {
-        boxes: newBoxes,
-        previousId: newPreviousID,
-        guessedPairs: isMatch ? isMatch + 1 : prevState.guessedPairs
+        boxes: boxesCopy,
+        previousId: newPreviousID
       };
     });
   };
 
+  shuffleBoxes(boxes) {
+    let shuffledBoxes = this.shuffleArr(boxes);
+    return shuffledBoxes.map((box, i) => {
+      return Object.assign({}, { ...box }, { id: i, boxState: status.FACE_DOWN });
+    });     
+  }
+
   resetGame = () => {
-    let newBoxes = this.getShuffledArr(this.props.boxes);
-    newBoxes = newBoxes.map((box, i) => {
-      return Object.assign({}, { ...box }, { id: i });
-    });
     this.setState({
-      boxes: newBoxes,
-      guessedPairs: 0,
+      boxes: this.shuffleBoxes(this.state.boxes),
       previousId: -1
     });
   };
 
-  setUpColors = noOfClrs => {
-    const half = Array(noOfClrs / 2)
-      .fill()
-      .map(() => this.getRandomColor());
-    let whole = [...half, ...half];
-    return this.getShuffledArr(whole);
-  };
-
-  getShuffledArr = arr => {
+  shuffleArr = arr => {
     const newArr = arr.slice();
     for (let i = newArr.length - 1; i > 0; i--) {
       const rand = Math.floor(Math.random() * (i + 1));
@@ -78,16 +96,10 @@ class App extends React.Component {
     return newArr;
   };
 
-  getRandomColor() {
-    let colorIndex = Math.floor(Math.random() * this.props.allColors.length);
-    return this.props.allColors[colorIndex];
-  }
-
   render() {
-    console.log('-------------------------');
     return (
       <div className="constainer">
-        <button onClick={this.resetGame}>Reset</button>
+       <Navbar resetGame={this.resetGame}/>
         <BoxesList boxes={this.state.boxes} handleClick={this.handleClick} />
       </div>
     );
@@ -96,25 +108,8 @@ class App extends React.Component {
 
 export default App;
 
-App.defaultProps = {
-  boxes: [
-    { id: 0, boxState: status.FACE_DOWN, color: 'blue' },
-    { id: 1, boxState: status.FACE_DOWN, color: 'Aqua' },
-    { id: 2, boxState: status.FACE_DOWN, color: 'yellow' },
-    { id: 3, boxState: status.FACE_DOWN, color: 'pink' },
-    { id: 4, boxState: status.FACE_DOWN, color: 'purple' },
-    { id: 5, boxState: status.FACE_DOWN, color: 'red' },
-    { id: 6, boxState: status.FACE_DOWN, color: 'brown' },
-    { id: 7, boxState: status.FACE_DOWN, color: 'coral' },
-    { id: 8, boxState: status.FACE_DOWN, color: 'yellow' },
-    { id: 9, boxState: status.FACE_DOWN, color: 'blue' },
-    { id: 10, boxState: status.FACE_DOWN, color: 'pink' },
-    { id: 11, boxState: status.FACE_DOWN, color: 'Aqua' },
-    { id: 12, boxState: status.FACE_DOWN, color: 'purple' },
-    { id: 13, boxState: status.FACE_DOWN, color: 'brown' },
-    { id: 14, boxState: status.FACE_DOWN, color: 'coral' },
-    { id: 15, boxState: status.FACE_DOWN, color: 'red' }
-  ],
+/* App.defaultProps = {
+  
   allColors: [
     'AliceBlue',
     'AntiqueWhite',
@@ -265,3 +260,4 @@ App.defaultProps = {
     'YellowGreen'
   ]
 };
+ */
