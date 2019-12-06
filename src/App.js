@@ -3,20 +3,18 @@ import BoxesList from './components/BoxesList';
 import './App.css';
 import { boxState } from './components/Box';
 
+const NO_OF_COLORS = 8;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       boxes: this.props.boxes,
+      guessedPairs: 0,
       previousId: -1
     };
   }
-
-  // if previously-revealed is the same color
-  //     set previously-revealed MATCHING & current MATCHING
-  // else
-  //     set previously-revealed FACE_DOWN & current FACE_UP
 
   handleClick = id => {
     const currentCopy = { ...this.state.boxes[id] };
@@ -25,24 +23,39 @@ class App extends React.Component {
         ? { id: -1, boxState: boxState.FACE_DOWN, color: '' } // dummy
         : { ...this.state.boxes[this.state.previousId] };
     let newPreviousID = null;
+    let isMatch = false;
 
     if (previousCopy.color === currentCopy.color) {
       console.log('Matching');
       previousCopy.boxState = boxState.MATCHING;
       currentCopy.boxState = boxState.MATCHING;
       newPreviousID = -1;
+      isMatch = true;
     } else {
       previousCopy.boxState = boxState.FACE_DOWN;
       currentCopy.boxState = boxState.FACE_UP;
       newPreviousID = id;
     }
-    
 
     let newBoxes = [...this.state.boxes];
     newBoxes[this.state.previousId] = previousCopy;
     newBoxes[id] = currentCopy;
 
-    this.setState({ boxes: newBoxes, previousId: newPreviousID });
+    this.setState((prevState, props) => {
+      return {
+        boxes: newBoxes,
+        previousId: newPreviousID,
+        guessedPairs: isMatch ? isMatch + 1 : prevState.guessedPairs
+      };
+    });
+  };
+
+  resetGame = () => {
+    this.setState({
+      boxes: this.props.boxes,
+      guessedPairs: 0,
+      previousId: -1
+    });
   };
 
   setUpColors = noOfClrs => {
@@ -70,6 +83,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="constainer">
+        <button onClick={this.resetGame}>Reset</button>
         <BoxesList boxes={this.state.boxes} handleClick={this.handleClick} />
       </div>
     );
