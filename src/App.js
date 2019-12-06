@@ -1,7 +1,7 @@
 import React from 'react';
 import BoxesList from './components/BoxesList';
 import './App.css';
-import { boxState } from './components/Box';
+import { status } from './components/Box';
 
 //const NO_OF_COLORS = 8;
 
@@ -20,19 +20,19 @@ class App extends React.Component {
     const currentCopy = { ...this.state.boxes[id] };
     const previousCopy =
       this.state.previousId === -1
-        ? { id: -1, boxState: boxState.FACE_DOWN, color: '' } // dummy
+        ? { id: -1, boxState: status.FACE_DOWN, color: '' } // dummy
         : { ...this.state.boxes[this.state.previousId] };
     let newPreviousID = null;
     let isMatch = false;
 
     if (previousCopy.color === currentCopy.color) {
-      previousCopy.boxState = boxState.MATCHING;
-      currentCopy.boxState = boxState.MATCHING;
+      previousCopy.boxState = status.MATCHING;
+      currentCopy.boxState = status.MATCHING;
       newPreviousID = -1;
       isMatch = true;
     } else {
-      previousCopy.boxState = boxState.FACE_DOWN;
-      currentCopy.boxState = boxState.FACE_UP;
+      previousCopy.boxState = status.FACE_DOWN;
+      currentCopy.boxState = status.FACE_UP;
       newPreviousID = id;
     }
 
@@ -52,8 +52,8 @@ class App extends React.Component {
   resetGame = () => {
     let newBoxes = this.getShuffledArr(this.props.boxes);
     newBoxes = newBoxes.map((box, i) => {
-      return Object.assign({}, {...box}, {id: i})
-    })
+      return Object.assign({}, { ...box }, { id: i });
+    });
     this.setState({
       boxes: newBoxes,
       guessedPairs: 0,
@@ -98,22 +98,22 @@ export default App;
 
 App.defaultProps = {
   boxes: [
-    { id: 0, boxState: boxState.FACE_DOWN, color: 'blue' },
-    { id: 1, boxState: boxState.FACE_DOWN, color: 'Aqua' },
-    { id: 2, boxState: boxState.FACE_DOWN, color: 'yellow' },
-    { id: 3, boxState: boxState.FACE_DOWN, color: 'pink' },
-    { id: 4, boxState: boxState.FACE_DOWN, color: 'purple' },
-    { id: 5, boxState: boxState.FACE_DOWN, color: 'red' },
-    { id: 6, boxState: boxState.FACE_DOWN, color: 'brown' },
-    { id: 7, boxState: boxState.FACE_DOWN, color: 'coral' },
-    { id: 8, boxState: boxState.FACE_DOWN, color: 'yellow' },
-    { id: 9, boxState: boxState.FACE_DOWN, color: 'blue' },
-    { id: 10, boxState: boxState.FACE_DOWN, color: 'pink' },
-    { id: 11, boxState: boxState.FACE_DOWN, color: 'Aqua' },
-    { id: 12, boxState: boxState.FACE_DOWN, color: 'purple' },
-    { id: 13, boxState: boxState.FACE_DOWN, color: 'brown' },
-    { id: 14, boxState: boxState.FACE_DOWN, color: 'coral' },
-    { id: 15, boxState: boxState.FACE_DOWN, color: 'red' }
+    { id: 0, boxState: status.FACE_DOWN, color: 'blue' },
+    { id: 1, boxState: status.FACE_DOWN, color: 'Aqua' },
+    { id: 2, boxState: status.FACE_DOWN, color: 'yellow' },
+    { id: 3, boxState: status.FACE_DOWN, color: 'pink' },
+    { id: 4, boxState: status.FACE_DOWN, color: 'purple' },
+    { id: 5, boxState: status.FACE_DOWN, color: 'red' },
+    { id: 6, boxState: status.FACE_DOWN, color: 'brown' },
+    { id: 7, boxState: status.FACE_DOWN, color: 'coral' },
+    { id: 8, boxState: status.FACE_DOWN, color: 'yellow' },
+    { id: 9, boxState: status.FACE_DOWN, color: 'blue' },
+    { id: 10, boxState: status.FACE_DOWN, color: 'pink' },
+    { id: 11, boxState: status.FACE_DOWN, color: 'Aqua' },
+    { id: 12, boxState: status.FACE_DOWN, color: 'purple' },
+    { id: 13, boxState: status.FACE_DOWN, color: 'brown' },
+    { id: 14, boxState: status.FACE_DOWN, color: 'coral' },
+    { id: 15, boxState: status.FACE_DOWN, color: 'red' }
   ],
   allColors: [
     'AliceBlue',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export const boxState = {
+export const status = {
   FACE_UP: 0,
   FACE_DOWN: 1,
   MATCHING: 2
@@ -35,13 +35,13 @@ export class Box extends Component {
   render() {
     const { id, color, boxState } = this.props.box;
     
-    console.log( id + color + boxState);    
+    console.log( id + color + status);    
 
     const style = {
       display: 'inline-block',
       width: '190px',
       height: '190px',
-      background: boxState === 1 ? 'grey' : color ,
+      background: boxState === status.FACE_DOWN ? 'grey' : color ,
       border: '1px solid black'
     };
     return (
