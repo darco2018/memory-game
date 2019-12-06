@@ -28,24 +28,24 @@ export class Box extends Component {
   };
 
   onClick = e => {
-    console.log(e.target.id);
+    //console.log(e.target.id);
     this.props.handleClick(Number(e.target.id));
   };
 
   render() {
     const { id, color, boxState } = this.props.box;
+    
     console.log( id + color + boxState);    
 
     const style = {
       display: 'inline-block',
-      width: '30px',
-      height: '30px',
+      width: '190px',
+      height: '190px',
       background: boxState === 1 ? 'grey' : color ,
       border: '1px solid black'
     };
     return (
       <div id={id} onClick={this.onClick} style={style}>
-        Box
       </div>
     );
   }

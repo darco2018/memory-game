@@ -3,7 +3,7 @@ import BoxesList from './components/BoxesList';
 import './App.css';
 import { boxState } from './components/Box';
 
-const NO_OF_COLORS = 8;
+//const NO_OF_COLORS = 8;
 
 class App extends React.Component {
   constructor(props) {
@@ -26,7 +26,6 @@ class App extends React.Component {
     let isMatch = false;
 
     if (previousCopy.color === currentCopy.color) {
-      console.log('Matching');
       previousCopy.boxState = boxState.MATCHING;
       currentCopy.boxState = boxState.MATCHING;
       newPreviousID = -1;
@@ -51,8 +50,12 @@ class App extends React.Component {
   };
 
   resetGame = () => {
+    let newBoxes = this.getShuffledArr(this.props.boxes);
+    newBoxes = newBoxes.map((box, i) => {
+      return Object.assign({}, {...box}, {id: i})
+    })
     this.setState({
-      boxes: this.props.boxes,
+      boxes: newBoxes,
       guessedPairs: 0,
       previousId: -1
     });
@@ -81,6 +84,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log('-------------------------');
     return (
       <div className="constainer">
         <button onClick={this.resetGame}>Reset</button>
