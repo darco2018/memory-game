@@ -1,10 +1,7 @@
 import React from 'react';
 import BoxesList from './components/BoxesList';
 import './App.css';
-import Navbar from './components/Navbar'
-//import { status } from './components/Box';
-
-//const NO_OF_COLORS = 8;
+import Navbar from './components/Navbar';
 
 export const status = {
   FACE_UP: 0,
@@ -33,7 +30,7 @@ class App extends React.Component {
       { id: 13, boxState: status.FACE_DOWN, color: 'brown' },
       { id: 14, boxState: status.FACE_DOWN, color: 'coral' },
       { id: 15, boxState: status.FACE_DOWN, color: 'red' }
-    ]
+    ];
 
     boxes = this.shuffleBoxes(boxes);
 
@@ -76,8 +73,12 @@ class App extends React.Component {
   shuffleBoxes(boxes) {
     let shuffledBoxes = this.shuffleArr(boxes);
     return shuffledBoxes.map((box, i) => {
-      return Object.assign({}, { ...box }, { id: i, boxState: status.FACE_DOWN });
-    });     
+      return Object.assign(
+        {},
+        { ...box },
+        { id: i, boxState: status.FACE_DOWN }
+      );
+    });
   }
 
   resetGame = () => {
@@ -99,7 +100,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="constainer">
-       <Navbar resetGame={this.resetGame}/>
+        <Navbar resetGame={this.resetGame} />
         <BoxesList boxes={this.state.boxes} handleClick={this.handleClick} />
       </div>
     );

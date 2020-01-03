@@ -3,12 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Navbar.css';
 
-//         (props.resetGame destructured)
 const Navbar = ({ resetGame }) => {
   return (
     <header>
       <h2>
-        <a>Memory Game</a>
+        <a>Pair Them Up!</a>
       </h2>
       <nav>
         <li>
